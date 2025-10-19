@@ -1,0 +1,16 @@
+<div class="login-container p-d-flex p-jc-center p-ai-center" style="height: 100vh;">
+  <p-card header="Login" styleClass="p-shadow-5" [style]="{ width: '350px' }">
+    <form>
+      <div class="p-field">
+        <label for="username">Username</label>
+        <input id="username" pInputText type="text" />
+      </div>
+      <div class="p-field">
+        <label for="password">Password</label>
+        <input id="password" pPassword />
+      </div>
+      <button pButton type="submit" label="Login" class="p-mt-2 p-button-rounded"></button>
+      <p class="p-mt-2">Don't have an account? <a routerLink="/register">Register</a></p>
+    </form>
+  </p-card>
+</div>

@@ -1,0 +1,21 @@
+.lobby-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+
+  p-card {
+    width: 400px;
+  }
+
+  li {
+    list-style: none;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+}

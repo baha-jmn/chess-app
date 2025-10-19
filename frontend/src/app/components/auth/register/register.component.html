@@ -1,0 +1,21 @@
+<div class="auth-card">
+  <p-card header="Register">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label for="username">Username</label>
+        <input pInputText id="username" formControlName="username" />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input pInputText id="password" type="password" formControlName="password" />
+      </div>
+      <button 
+        pButton 
+        type="submit" 
+        label="Register" 
+        [disabled]="registerForm.invalid || loading">
+      </button>
+    </form>
+  </p-card>
+</div>
+<p-toast></p-toast>

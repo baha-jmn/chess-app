@@ -1,0 +1,10 @@
+<div class="lobby-container">
+  <p-card header="Players Online">
+    <ul>
+      <li *ngFor="let player of players" (click)="invite(player)">
+        {{ player.username }}
+        <i class="pi pi-send" style="margin-left: 0.5rem; cursor: pointer;"></i>
+      </li>
+    </ul>
+  </p-card>
+</div>

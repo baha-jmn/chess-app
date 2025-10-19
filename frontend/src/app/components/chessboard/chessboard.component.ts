@@ -9,6 +9,7 @@ import { GameService } from 'src/app/services/game-service/game.service';
 export class ChessboardComponent implements OnInit {
 
   board: string[][] = [];
+  flatBoard: string[] = [];
   selectedCell: { row: number; col: number } | null = null;
   gameId = 1;
 
@@ -22,40 +23,61 @@ export class ChessboardComponent implements OnInit {
 
   initializeBoard() {
     this.board = [
-      ['♜','♞','♝','♛','♚','♝','♞','♜'], // black back row
-      ['♟','♟','♟','♟','♟','♟','♟','♟'], // black pawns
-      ['','','','','','','',''],           // empty row
+      ['♜','♞','♝','♛','♚','♝','♞','♜'],
+      ['♟','♟','♟','♟','♟','♟','♟','♟'],
       ['','','','','','','',''],
       ['','','','','','','',''],
       ['','','','','','','',''],
-      ['♙','♙','♙','♙','♙','♙','♙','♙'], // white pawns
-      ['♖','♘','♗','♕','♔','♗','♘','♖']  // white back row
+      ['','','','','','','',''],
+      ['♙','♙','♙','♙','♙','♙','♙','♙'],
+      ['♖','♘','♗','♕','♔','♗','♘','♖']
     ];
-
+    
+    this.flatBoard = this.board.flat();
   }
 
-  getCellColor(row: number, col: number): string {
-    return (row + col) % 2 === 0 ? 'white-cell' : 'black-cell';
+  getCellClass(row: number, col: number): string {
+    const isWhite = (row + col) % 2 === 0;
+    const isSelected = this.selectedCell?.row === row && this.selectedCell?.col === col;
+    
+    return `${isWhite ? 'white-cell' : 'black-cell'}${isSelected ? ' selected' : ''}`;
+  }
+
+  getCellClassByIndex(index: number): string {
+    const row = Math.floor(index / 8);
+    const col = index % 8;
+    return this.getCellClass(row, col);
   }
 
   selectCell(row: number, col: number) {
     const piece = this.board[row][col];
+    
     if (this.selectedCell) {
       const from = this.selectedCell;
       const to = { row, col };
       const pieceMoved = this.board[from.row][from.col];
 
-      this.gameService.sendMove({ gameId: this.gameId, from, to, piece: pieceMoved });
-
-      this.applyMove({ from, to, piece: pieceMoved });
+      if (pieceMoved) {
+        this.gameService.sendMove({ gameId: this.gameId, from, to, piece: pieceMoved });
+        this.applyMove({ from, to, piece: pieceMoved });
+      }
+      
       this.selectedCell = null;
     } else if (piece) {
       this.selectedCell = { row, col };
     }
   }
 
+  selectCellByIndex(index: number) {
+    const row = Math.floor(index / 8);
+    const col = index % 8;
+    this.selectCell(row, col);
+  }
+
   applyMove(move: { from: { row: number; col: number }; to: { row: number; col: number }; piece: string }) {
     this.board[move.to.row][move.to.col] = move.piece;
     this.board[move.from.row][move.from.col] = '';
+    
+    this.flatBoard = this.board.flat();
   }
 }

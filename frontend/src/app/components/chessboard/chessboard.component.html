@@ -1,14 +1,12 @@
 <div class="chessboard-container">
   <div class="board">
-    <div class="row" *ngFor="let row of board; let r = index">
-      <div
-        class="cell"
-        *ngFor="let cell of row; let c = index"
-        [ngClass]="{'white-cell': (r+c)%2===0, 'black-cell': (r+c)%2===1}"
-        (click)="selectCell(r, c)"
-      >
-        {{ cell }}
-      </div>
+    <div
+      class="cell"
+      *ngFor="let cell of flatBoard; let i = index"
+      [ngClass]="getCellClassByIndex(i)"
+      (click)="selectCellByIndex(i)"
+    >
+      {{ cell }}
     </div>
   </div>
 </div>

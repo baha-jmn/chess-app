@@ -37,6 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(auth);
+            System.out.println("Authenticated user: " + username);
+        } else {
+            System.out.println("No valid JWT found for request: " + request.getRequestURI());
         }
 
         filterChain.doFilter(request, response);

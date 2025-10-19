@@ -4,6 +4,14 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Application configuration with credentials
+src/main/resources/application-dev.yml
+src/main/resources/application-prod.yml
+
+# Environment files (if you add them back later)
+.env
+.env.*
+
 ### STS ###
 .apt_generated
 .classpath

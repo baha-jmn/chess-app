@@ -1,9 +1,12 @@
 <div class="lobby-container">
-  <p-card header="Players Online">
+  <p-card header="Players Online" class="lobby-card">
     <ul>
       <li *ngFor="let player of players" (click)="invite(player)">
-        {{ player.username }}
-        <i class="pi pi-send" style="margin-left: 0.5rem; cursor: pointer;"></i>
+        <span class="player-name">{{ player.username }}</span>
+        <i class="pi pi-send invite-icon"></i>
+      </li>
+      <li *ngIf="players.length === 0" class="no-players">
+        No players online
       </li>
     </ul>
   </p-card>

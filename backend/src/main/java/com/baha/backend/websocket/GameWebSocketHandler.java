@@ -16,7 +16,7 @@ public class GameWebSocketHandler {
     private final GameService gameService;
     private final OnlinePlayers onlinePlayers;
 
-    @MessageMapping("/invite")
+    @MessageMapping("/invite/game")
     @SendTo("/topic/invitations")
     public String invite(String payload) {
         String[] parts = payload.split(":");

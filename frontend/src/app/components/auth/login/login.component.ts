@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  loading = false;
 
   constructor(
     private fb: FormBuilder, 
@@ -23,12 +24,14 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.invalid) return;
+    this.loading = true;
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         this.router.navigate(['/lobby']);
       },
-      error: err => console.error(err)
+      error: err => console.error(err),
+      complete: () => this.loading = false
     });
   }
 }

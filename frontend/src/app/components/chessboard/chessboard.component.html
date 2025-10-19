@@ -1,11 +1,14 @@
 <div class="chessboard-container">
-  <p-card header="Chess Game">
-    <div class="board">
-      <div class="row" *ngFor="let row of board; let r = index">
-        <div class="cell" *ngFor="let cell of row; let c = index" (click)="selectCell(r, c)">
-          {{ cell }}
-        </div>
+  <div class="board">
+    <div class="row" *ngFor="let row of board; let r = index">
+      <div
+        class="cell"
+        *ngFor="let cell of row; let c = index"
+        [ngClass]="{'white-cell': (r+c)%2===0, 'black-cell': (r+c)%2===1}"
+        (click)="selectCell(r, c)"
+      >
+        {{ cell }}
       </div>
     </div>
-  </p-card>
+  </div>
 </div>

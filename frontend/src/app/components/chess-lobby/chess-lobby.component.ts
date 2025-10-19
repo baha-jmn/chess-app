@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game-service/game.service';
+import { PlayersService } from 'src/app/services/players-service/players.service';
 
 @Component({
   selector: 'app-chess-lobby',
@@ -10,19 +10,20 @@ import { GameService } from 'src/app/services/game-service/game.service';
 export class ChessLobbyComponent implements OnInit {
   players: any[] = [];
 
-  constructor(private gameService: GameService, private http: HttpClient) {}
+  constructor(
+    private gameService: GameService,
+    private playersService: PlayersService
+  ) {}
 
   ngOnInit(): void {
     this.gameService.moves$.subscribe(message => {
       console.log('WebSocket message received:', message);
     });
 
-    // Fetch online players from backend
-    this.http.get<any[]>('http://localhost:8080/api/players/online')
-      .subscribe({
-        next: data => this.players = data,
-        error: err => console.error('Failed to fetch players', err)
-      });
+    this.playersService.getOnlinePlayers().subscribe({
+      next: data => this.players = data.map(username => ({ username })),
+      error: err => console.error('Failed to fetch players', err)
+    });
   }
 
   invite(player: any) {

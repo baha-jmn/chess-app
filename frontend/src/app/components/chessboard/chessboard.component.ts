@@ -8,27 +8,54 @@ import { GameService } from 'src/app/services/game-service/game.service';
 })
 export class ChessboardComponent implements OnInit {
 
-  board: string[][] = Array(8).fill(null).map(() => Array(8).fill(''));
+  board: string[][] = [];
   selectedCell: { row: number; col: number } | null = null;
+  gameId = 1;
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
+    this.initializeBoard();
     this.gameService.connectWebSocket();
+    this.gameService.onMoveReceived().subscribe(move => this.applyMove(move));
+  }
 
-    this.gameService.moves$.subscribe(move => {
-      const { from, to, piece } = move;
-      this.board[to.row][to.col] = piece;
-      this.board[from.row][from.col] = '';
-    });
+  initializeBoard() {
+    this.board = [
+      ['♜','♞','♝','♛','♚','♝','♞','♜'], // black back row
+      ['♟','♟','♟','♟','♟','♟','♟','♟'], // black pawns
+      ['','','','','','','',''],           // empty row
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['♙','♙','♙','♙','♙','♙','♙','♙'], // white pawns
+      ['♖','♘','♗','♕','♔','♗','♘','♖']  // white back row
+    ];
+
+  }
+
+  getCellColor(row: number, col: number): string {
+    return (row + col) % 2 === 0 ? 'white-cell' : 'black-cell';
   }
 
   selectCell(row: number, col: number) {
+    const piece = this.board[row][col];
     if (this.selectedCell) {
-      this.gameService.sendMove({ from: this.selectedCell, to: { row, col } });
+      const from = this.selectedCell;
+      const to = { row, col };
+      const pieceMoved = this.board[from.row][from.col];
+
+      this.gameService.sendMove({ gameId: this.gameId, from, to, piece: pieceMoved });
+
+      this.applyMove({ from, to, piece: pieceMoved });
       this.selectedCell = null;
-    } else {
+    } else if (piece) {
       this.selectedCell = { row, col };
     }
+  }
+
+  applyMove(move: { from: { row: number; col: number }; to: { row: number; col: number }; piece: string }) {
+    this.board[move.to.row][move.to.col] = move.piece;
+    this.board[move.from.row][move.from.col] = '';
   }
 }
